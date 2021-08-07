@@ -29,4 +29,9 @@ RSpec.describe Enigma do
     # need mock/stub for date
     expect(@enigma.decrypt("nefau qdxly", "02715")).to eq({decryption: "hello world", key: "02715", date: "060821"})
   end
+
+  it '#today_generator method returns date in DDMMYY format' do
+    # need mock/stub for date
+    expect(@enigma.today_generator).to eq("060821")
+  end
 end
