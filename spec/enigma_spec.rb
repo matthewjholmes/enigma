@@ -4,6 +4,7 @@ require 'date'
 RSpec.describe Enigma do
   before(:each) do
     @enigma = Enigma.new
+    @message = "hello world"
   end
 
   describe '#initalize' do
@@ -58,11 +59,29 @@ RSpec.describe Enigma do
       expect(@enigma.alphabet_array.length).to eq(27)
     end
 
-    it '#offset_generator generates from last four of date^2' do
+    it '#offset_generator(source) generates from last four of date^2' do
       # need mock/stub for date
       # for 070821:
-      expected = {a_offset: 4, b_offset: 0, c_offset: 4, d_offset: 1}
-      expect(@enigma.offset_generator).to eq(expected)
+      supplied_date_offsets = {a_offset: 1, b_offset: 0, c_offset: 2, d_offset: 5}
+      today_offsets = {a_offset: 4, b_offset: 0, c_offset: 4, d_offset: 1}
+      expect(@enigma.offset_generator(:today)).to eq(today_offsets)
+      expect(@enigma.offset_generator("040895")).to eq(supplied_date_offsets)
+    end
+
+    xit '#shift_generator adds keys and offsets together' do
+      date1 = double(@enigma.date)
+      allow(date1).to receive(:date).and_return("070821")
+      key1 = double(@enigma.key_generator)
+      allow(key1).to receive(:key_generator).and_return("71285")
+      # @enigma.offset_generator("070821")
+      # @enigma.key_parser("71285")
+      expected = {a_shift: 48, b_shift: 45, c_shift: 58, d_shift: 48}
+      expect(@enigma.shift_generator).to eq(expected)
+    end
+
+    it '#message_parser selects every fourth element in array' do
+      expected = {a_items: ["h", "o", "r"], b_items: ["e", " ", "l"], c_items: ["l", "w", "d"], d_items: ["l", "o"]}
+      expect(@enigma.message_parser("hello world")).to eq(expected)
     end
   end
 end
