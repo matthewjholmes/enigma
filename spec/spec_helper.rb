@@ -6,3 +6,5 @@ SimpleCov.start
 require './lib/keys'
 require './lib/offsets'
 require './lib/shifts'
+require './lib/enigma'
+require './lib/encrypt'
