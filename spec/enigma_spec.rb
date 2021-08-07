@@ -14,7 +14,7 @@ RSpec.describe Enigma do
 
   describe '#encrpyt' do
     # key and date arguments should be optional
-    it 'can #encrypt(message, key, date)' do
+    xit 'can #encrypt(message, key, date)' do
       expect(@enigma.encrypt("hello world", "02715", "060821")).to be_a(Hash)
       expect(@enigma.encrypt("hello", "02715", "060821")).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
     end
@@ -52,6 +52,17 @@ RSpec.describe Enigma do
     it '#key_generator generates random five-digit number' do
       # mock/stub
       expect(@enigma.key_generator.length).to eq(5)
+    end
+
+    it '#alphabet_array generates 27-char array with space' do
+      expect(@enigma.alphabet_array.length).to eq(27)
+    end
+
+    it '#offset_generator generates from last four of date^2' do
+      # need mock/stub for date
+      # for 070821:
+      expected = {a_offset: 4, b_offset: 0, c_offset: 4, d_offset: 1}
+      expect(@enigma.offset_generator).to eq(expected)
     end
   end
 end
