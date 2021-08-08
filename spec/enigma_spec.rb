@@ -47,7 +47,8 @@ RSpec.describe Enigma do
     end
 
     it '#key_parser parses keys' do
-      expect(@enigma.key_parser("02715")).to eq({a_key: 02, b_key: 27, c_key: 71, d_key: 15})
+      expected = {a_key: 02, b_key: 27, c_key: 71, d_key: 15}
+      expect(@enigma.key_parser("02715")).to eq(expected)
     end
 
     it '#key_generator generates random five-digit number' do
@@ -79,9 +80,16 @@ RSpec.describe Enigma do
       expect(@enigma.shift_generator).to eq(expected)
     end
 
-    it '#message_parser selects every fourth element in array' do
-      expected = {a_items: ["h", "o", "r"], b_items: ["e", " ", "l"], c_items: ["l", "w", "d"], d_items: ["l", "o"]}
-      expect(@enigma.message_parser("hello world")).to eq(expected)
+    it '#char_index_lookup returns index of each message char in alphabet_array' do
+      expected = [7, 4, 11, 11, 14, 26, 22, 14, 17, 11, 3]
+
+      expect(@enigma.char_index_lookup("hello world")).to eq(expected)
+    end
+
+    it '#message_char_shift_groups(message) collects character indices according to which shift should be applied' do
+      expected = {a_indices: ["h", "o", "r"], b_indices: ["e", " ", "l"], c_indices: ["l", "w", "d"], d_indices: ["l", "o"]}
+
+      expect(@enigma.message_char_shift_groups(@message)).to eq(expected)
     end
   end
 end

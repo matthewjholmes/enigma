@@ -1,0 +1,20 @@
+ENIGMA
+  methods
+    encrypt - output hash
+    decrypt - output hash
+
+    encrypt(message, key, date)
+      message String as an argument.
+      optional take a Key and Date as arguments
+      No key then generate
+      no date then generate
+
+
+
+
+      You should be able to generate random numbers with leading zeros
+
+      Your translation should only translate using lowercase letters. If a letter is uppercase, it should use the lowercase translation, so in the example above, “HELLO WORLD” would still translate to “keder ohulw”
+
+      
+      If you encounter a character not in the character set, it should be translated as itself. Using the example above, “hello world!” should be translated as “keder ohulw!”

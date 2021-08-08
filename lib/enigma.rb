@@ -10,6 +10,7 @@ class Enigma
   def encrypt(message, key = key_generator, date = today_generator)
     @key = key
     @date = date
+
     hash = Hash.new
     # t = message.split("")
 
@@ -60,14 +61,61 @@ class Enigma
   end
 
   def alphabet_array
-    t = ("a".."z").to_a << " "
+    ("a".."z").to_a << " "
   end
 
-  def message_parser(string)
-    message_arry = string.split("")
-    t = message_arry.select do |char|
-      index(char) % 4 == 0
+  def char_index_lookup(message)
+    message_arry = message.split("")
+    message_arry.map do |char|
+      alphabet_array.index(char)
     end
-    require "pry"; binding.pry
   end
+
+  def message_char_shift_groups(message)
+    index_arry = char_index_lookup(message)
+    hash = Hash.new([])
+    t = index_arry.each_with_index do |index, char_position|
+      if index.index(char_position) % 4 == 0
+        hash[:a] ||= [char_position]
+        hash[:a] << [char_position]
+      elsif index.index(char_position) % 4 == 1
+        hash[:b] ||= [char_position]
+        hash[:b] << [char_position]
+      elsif index.index(char_position) % 4 == 2
+        hash[:c] ||= [char_position]
+        hash[:c] << [char_position]
+      elsif index.index(char_position) % 4 == 3
+        hash[:d] ||= [char_position]
+        hash[:d] << [char_position]
+      end
+    end
+    hash
+    require "pry"; binding.pry
+    # a = index_arry.each_with_index.group_by do |char_position, index|
+    #   # char_position.each do |
+    #   # % 4 == 0
+    #   require "pry"; binding.pry
+    # end
+    # b = index_arry.find_all do |char_position|
+    #   index_arry.index(char_position) % 4 == 1
+    # end
+    # c = index_arry.find_all do |char_position|
+    #   index_arry.index(char_position) % 4 == 2
+    # end
+    # d = index_arry.find_all do |char_position|
+    #   require "pry"; binding.pry
+    #   index_arry.index(char_position) % 4 == 3
+    # end
+
+  end
+
+  # find char index for knowing which shift to apply
+  #shift and get new index position
+
+
+  # find within charcter array the index position of each character in message
+  # with_index
+  # each_with_index
+
+
 end
