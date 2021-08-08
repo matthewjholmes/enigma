@@ -1,0 +1,109 @@
+require_relative 'spec_helper'
+require 'date'
+
+RSpec.describe Enigma do
+  before(:each) do
+    @enigma = Enigma.new
+    @message = "hello world"
+  end
+
+  describe '#initalize' do
+    it 'exists' do
+      expect(@enigma).to be_instance_of(Enigma)
+    end
+  end
+
+  describe '#encrpyt' do
+    # key and date arguments should be optional
+    it 'can #encrypt(message, key, date)' do
+      expect(@enigma.encrypt("hello world", "02715", "060821")).to be_a(Hash)
+      expect(@enigma.encrypt("hello world", "02715", "060821")).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
+    end
+
+    xit '#encrypt method takes key and date as optional' do
+      # need mock/stub for key and date generation
+      expect(@enigma.encrypt("hello world")).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
+
+      expect(@enigma.encrypt("hello world", "02715")).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
+    end
+
+    it '#letter_encrypter(message) applys shifts' do
+      # need mock/stub for key and date generation
+      expect(@enigma.letter_encrypter("hello world")).to eq("nefau qdxly")
+    end
+  end
+
+  describe '#decrypt' do
+    xit 'can #decrypt(cyphertext, key, date)' do
+      expect(@enigma.decrypt("nefau qdxly", "02715", "060821")).to eq({decryption: "hello world", key: "02715", date: "060821"})
+    end
+
+    xit '#decrypt method can supply date if not provided' do
+      # need mock/stub for date
+      encrypted = enigma.encrypt("hello world", "02715")
+      expect(@enigma.decrypt(encrypted[:encryption], "02715")).to eq({decryption: "hello world", key: "02715", date: "060821"})
+    end
+  end
+
+  describe 'helper methods (may be moved to other classes)' do
+    it '#today_generator method returns date in DDMMYY format' do
+      # need mock/stub for date
+      expect(@enigma.today_generator).to eq("070821")
+    end
+
+    it '#key_parser parses keys' do
+      expected = {a_key: 02, b_key: 27, c_key: 71, d_key: 15}
+      expect(@enigma.key_parser("02715")).to eq(expected)
+    end
+
+    it '#key_generator generates random five-digit number' do
+      # mock/stub
+      expect(@enigma.key_generator.length).to eq(5)
+    end
+
+    it '#character_array generates 27-char array with space' do
+      expect(@enigma.character_array.length).to eq(27)
+    end
+
+    it '#offset_generator(source) generates from last four of date^2' do
+      # need mock/stub for date
+      # for 070821:
+      supplied_date_offsets = {a_offset: 1, b_offset: 0, c_offset: 2, d_offset: 5}
+      today_offsets = {a_offset: 4, b_offset: 0, c_offset: 4, d_offset: 1}
+      expect(@enigma.offset_generator(:today)).to eq(today_offsets)
+      expect(@enigma.offset_generator("040895")).to eq(supplied_date_offsets)
+    end
+
+    xit '#shift_generator adds keys and offsets together' do
+      date1 = double(@enigma.date)
+      allow(date1).to receive(:date).and_return("070821")
+      key1 = double(@enigma.key_generator)
+      allow(key1).to receive(:key_generator).and_return("71285")
+      # @enigma.offset_generator("070821")
+      # @enigma.key_parser("71285")
+      expected = {a_shift: 48, b_shift: 45, c_shift: 58, d_shift: 48}
+      expect(@enigma.shift_generator).to eq(expected)
+    end
+
+    it '#char_index_lookup returns index of each message char in character_array' do
+      expected = [7, 4, 11, 11, 14, 26, 22, 14, 17, 11, 3]
+
+      expect(@enigma.char_index_lookup("hello world")).to eq(expected)
+    end
+
+    it '#message_char_shift_groups(message) collects character indices according to which shift should be applied' do
+      expected = [[7, 14, 17], [4, 26, 11], [11, 22, 3], [11, 14]]
+
+      expect(@enigma.message_char_shift_groups(@message)).to eq(expected)
+    end
+
+    xit '#shift_rotation(shift) encrypts letters' do
+      shift_1 = ["z", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y"]
+      shift_2 = ["n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"]
+      # need mock/stub for shifts
+      expect(@enigma.shift_rotation).to eq(shift_1)
+      expect(@enigma.shift_rotation).to eq(shift_2)
+    end
+
+  end
+end
