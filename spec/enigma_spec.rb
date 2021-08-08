@@ -87,9 +87,10 @@ RSpec.describe Enigma do
     end
 
     it '#message_char_shift_groups(message) collects character indices according to which shift should be applied' do
-      expected = {a_indices: ["h", "o", "r"], b_indices: ["e", " ", "l"], c_indices: ["l", "w", "d"], d_indices: ["l", "o"]}
+      expected = {a_indices: [7, 14, 17], b_indices: [4, 26, 11], c_indices: [11, 22, 3], d_indices: [11, 14]}
 
       expect(@enigma.message_char_shift_groups(@message)).to eq(expected)
+
     end
   end
 end

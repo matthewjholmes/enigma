@@ -73,40 +73,25 @@ class Enigma
 
   def message_char_shift_groups(message)
     index_arry = char_index_lookup(message)
-    hash = Hash.new([])
-    t = index_arry.each_with_index do |index, char_position|
-      if index.index(char_position) % 4 == 0
-        hash[:a] ||= [char_position]
-        hash[:a] << [char_position]
-      elsif index.index(char_position) % 4 == 1
-        hash[:b] ||= [char_position]
-        hash[:b] << [char_position]
-      elsif index.index(char_position) % 4 == 2
-        hash[:c] ||= [char_position]
-        hash[:c] << [char_position]
-      elsif index.index(char_position) % 4 == 3
-        hash[:d] ||= [char_position]
-        hash[:d] << [char_position]
+    shift_groups = {a_indices: [],
+                    b_indices: [],
+                    c_indices: [],
+                    d_indices: []}
+    d_val_length = shift_groups[:d_indices].length
+    maximum_val_length = index_arry.length % 4
+    index_arry.each_with_index do |num, index|
+      if index % 4 == 0
+        shift_groups[:a_indices] << num
+      elsif index % 4 == 1
+        shift_groups[:b_indices] << num
+      elsif index % 4 == 2
+        shift_groups[:c_indices] << num
+      elsif index % 4 == 3
+        shift_groups[:d_indices] << num
       end
+      break if d_val_length == maximum_val_length
     end
-    hash
-    require "pry"; binding.pry
-    # a = index_arry.each_with_index.group_by do |char_position, index|
-    #   # char_position.each do |
-    #   # % 4 == 0
-    #   require "pry"; binding.pry
-    # end
-    # b = index_arry.find_all do |char_position|
-    #   index_arry.index(char_position) % 4 == 1
-    # end
-    # c = index_arry.find_all do |char_position|
-    #   index_arry.index(char_position) % 4 == 2
-    # end
-    # d = index_arry.find_all do |char_position|
-    #   require "pry"; binding.pry
-    #   index_arry.index(char_position) % 4 == 3
-    # end
-
+    shift_groups
   end
 
   # find char index for knowing which shift to apply
