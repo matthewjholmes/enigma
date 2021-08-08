@@ -10,14 +10,9 @@ class Enigma
   def encrypt(message, key = key_generator, date = today_generator)
     @key = key
     @date = date
+    encryption_hash = {encryptions: "", key: "", date: ""}
+    t = message_char_shift_groups(message)
 
-    hash = Hash.new
-    # t = message.split("")
-
-    # e = t.each_slice(4).map do |letter|
-    #   letter.upcase
-    # end
-    # e = t.values_at
   end
 
   def offset_generator(source)
@@ -40,7 +35,7 @@ class Enigma
     b = offset_generator(@date)[:b_offset] + key_parser(@key)[:b_key]
     c = offset_generator(@date)[:c_offset] + key_parser(@key)[:c_key]
     d = offset_generator(@date)[:d_offset] + key_parser(@key)[:d_key]
-    t = {a_shift: a, b_shift: b, c_shift: c, d_shift: d}
+    {a_shift: a, b_shift: b, c_shift: c, d_shift: d}
   end
 
   def today_generator
@@ -60,14 +55,14 @@ class Enigma
     '%05d' % random
   end
 
-  def alphabet_array
+  def character_array
     ("a".."z").to_a << " "
   end
 
   def char_index_lookup(message)
     message_arry = message.split("")
     message_arry.map do |char|
-      alphabet_array.index(char)
+      character_array.index(char)
     end
   end
 
@@ -94,6 +89,9 @@ class Enigma
     shift_groups
   end
 
+  def shift_rotation(shift)
+    character_array.rotate(shift)
+  end
   # find char index for knowing which shift to apply
   #shift and get new index position
 
@@ -102,5 +100,6 @@ class Enigma
   # with_index
   # each_with_index
 
+# e = t.values_at
 
 end

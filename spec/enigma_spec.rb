@@ -56,8 +56,8 @@ RSpec.describe Enigma do
       expect(@enigma.key_generator.length).to eq(5)
     end
 
-    it '#alphabet_array generates 27-char array with space' do
-      expect(@enigma.alphabet_array.length).to eq(27)
+    it '#character_array generates 27-char array with space' do
+      expect(@enigma.character_array.length).to eq(27)
     end
 
     it '#offset_generator(source) generates from last four of date^2' do
@@ -80,7 +80,7 @@ RSpec.describe Enigma do
       expect(@enigma.shift_generator).to eq(expected)
     end
 
-    it '#char_index_lookup returns index of each message char in alphabet_array' do
+    it '#char_index_lookup returns index of each message char in character_array' do
       expected = [7, 4, 11, 11, 14, 26, 22, 14, 17, 11, 3]
 
       expect(@enigma.char_index_lookup("hello world")).to eq(expected)
@@ -90,7 +90,13 @@ RSpec.describe Enigma do
       expected = {a_indices: [7, 14, 17], b_indices: [4, 26, 11], c_indices: [11, 22, 3], d_indices: [11, 14]}
 
       expect(@enigma.message_char_shift_groups(@message)).to eq(expected)
+    end
 
+    it '#shift_rotation(shift) encrypts letters' do
+      shift_1 = ["z", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y"]
+      shift_2 = ["n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"]
+      expect(@enigma.shift_rotation(25)).to eq(shift_1)
+      expect(@enigma.shift_rotation(67)).to eq(shift_2)
     end
   end
 end
