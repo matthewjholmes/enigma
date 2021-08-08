@@ -10,8 +10,11 @@ class Enigma
   def encrypt(message, key = key_generator, date = today_generator)
     @key = key
     @date = date
-    message_array = []
-    encryption_hash = {encryptions: "", key: "", date: ""}
+    encryption_text = letter_encrypter(message)
+    {encryption: encryption_text, key: @key, date: @date}
+  end
+
+  def letter_encrypter(message)
     a = message_char_shift_groups(message)[0].map do |letter_index|
       shift_rotation[:a_rotation][letter_index]
     end
@@ -24,7 +27,9 @@ class Enigma
     d = message_char_shift_groups(message)[3].map do |letter_index|
       shift_rotation[:d_rotation][letter_index]
     end
-    require "pry"; binding.pry
+    ordered_array = a.zip(b, c, d)
+    unified_array = ordered_array.flatten.compact
+    encryption_text = unified_array.join
   end
 
   def offset_generator(source)

@@ -17,7 +17,7 @@ RSpec.describe Enigma do
     # key and date arguments should be optional
     it 'can #encrypt(message, key, date)' do
       expect(@enigma.encrypt("hello world", "02715", "060821")).to be_a(Hash)
-      expect(@enigma.encrypt("hello", "02715", "060821")).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
+      expect(@enigma.encrypt("hello world", "02715", "060821")).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
     end
 
     xit '#encrypt method takes key and date as optional' do
@@ -25,6 +25,11 @@ RSpec.describe Enigma do
       expect(@enigma.encrypt("hello world")).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
 
       expect(@enigma.encrypt("hello world", "02715")).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
+    end
+
+    it '#letter_encrypter(message) applys shifts' do
+      # need mock/stub for key and date generation
+      expect(@enigma.letter_encrypter("hello world")).to eq("nefau qdxly")
     end
   end
 
@@ -99,5 +104,6 @@ RSpec.describe Enigma do
       expect(@enigma.shift_rotation).to eq(shift_1)
       expect(@enigma.shift_rotation).to eq(shift_2)
     end
+
   end
 end
