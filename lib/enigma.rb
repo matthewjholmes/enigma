@@ -10,9 +10,21 @@ class Enigma
   def encrypt(message, key = key_generator, date = today_generator)
     @key = key
     @date = date
+    message_array = []
     encryption_hash = {encryptions: "", key: "", date: ""}
-    t = message_char_shift_groups(message)
-
+    a = message_char_shift_groups(message)[0].map do |letter_index|
+      shift_rotation[:a_rotation][letter_index]
+    end
+    b = message_char_shift_groups(message)[1].map do |letter_index|
+      shift_rotation[:b_rotation][letter_index]
+    end
+    c = message_char_shift_groups(message)[2].map do |letter_index|
+      shift_rotation[:c_rotation][letter_index]
+    end
+    d = message_char_shift_groups(message)[3].map do |letter_index|
+      shift_rotation[:d_rotation][letter_index]
+    end
+    require "pry"; binding.pry
   end
 
   def offset_generator(source)
@@ -68,29 +80,34 @@ class Enigma
 
   def message_char_shift_groups(message)
     index_arry = char_index_lookup(message)
-    shift_groups = {a_indices: [],
-                    b_indices: [],
-                    c_indices: [],
-                    d_indices: []}
-    d_val_length = shift_groups[:d_indices].length
-    maximum_val_length = index_arry.length % 4
+    shift_groups = [[],[],[],[]]
+    # shift_groups = {a_indices: [],
+    #                 b_indices: [],
+    #                 c_indices: [],
+    #                 d_indices: []}
+    d_group_length = shift_groups[3].length
+    max_group_length = index_arry.length % 4
     index_arry.each_with_index do |num, index|
       if index % 4 == 0
-        shift_groups[:a_indices] << num
+        shift_groups[0] << num
       elsif index % 4 == 1
-        shift_groups[:b_indices] << num
+        shift_groups[1] << num
       elsif index % 4 == 2
-        shift_groups[:c_indices] << num
+        shift_groups[2] << num
       elsif index % 4 == 3
-        shift_groups[:d_indices] << num
+        shift_groups[3] << num
       end
-      break if d_val_length == maximum_val_length
+      break if d_group_length == max_group_length
     end
     shift_groups
   end
 
-  def shift_rotation(shift)
-    character_array.rotate(shift)
+  def shift_rotation
+    a = character_array.rotate(shift_generator[:a_shift])
+    b = character_array.rotate(shift_generator[:b_shift])
+    c = character_array.rotate(shift_generator[:c_shift])
+    d = character_array.rotate(shift_generator[:d_shift])
+    {a_rotation: a, b_rotation: b, c_rotation: c, d_rotation: d}
   end
   # find char index for knowing which shift to apply
   #shift and get new index position

@@ -15,7 +15,7 @@ RSpec.describe Enigma do
 
   describe '#encrpyt' do
     # key and date arguments should be optional
-    xit 'can #encrypt(message, key, date)' do
+    it 'can #encrypt(message, key, date)' do
       expect(@enigma.encrypt("hello world", "02715", "060821")).to be_a(Hash)
       expect(@enigma.encrypt("hello", "02715", "060821")).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
     end
@@ -87,16 +87,17 @@ RSpec.describe Enigma do
     end
 
     it '#message_char_shift_groups(message) collects character indices according to which shift should be applied' do
-      expected = {a_indices: [7, 14, 17], b_indices: [4, 26, 11], c_indices: [11, 22, 3], d_indices: [11, 14]}
+      expected = [[7, 14, 17], [4, 26, 11], [11, 22, 3], [11, 14]]
 
       expect(@enigma.message_char_shift_groups(@message)).to eq(expected)
     end
 
-    it '#shift_rotation(shift) encrypts letters' do
+    xit '#shift_rotation(shift) encrypts letters' do
       shift_1 = ["z", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y"]
       shift_2 = ["n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"]
-      expect(@enigma.shift_rotation(25)).to eq(shift_1)
-      expect(@enigma.shift_rotation(67)).to eq(shift_2)
+      # need mock/stub for shifts
+      expect(@enigma.shift_rotation).to eq(shift_1)
+      expect(@enigma.shift_rotation).to eq(shift_2)
     end
   end
 end
