@@ -15,17 +15,17 @@ class Enigma
   end
 
   def letter_encrypter(message)
-    a = message_char_shift_groups(message)[0].map do |letter_index|
-      shift_rotation[:a_rotation][letter_index]
+    a = message_char_shift_groups(message)[0].map do |letter|
+      shift_rotation(:a_shift)[letter]
     end
-    b = message_char_shift_groups(message)[1].map do |letter_index|
-      shift_rotation[:b_rotation][letter_index]
+    b = message_char_shift_groups(message)[1].map do |letter|
+      shift_rotation(:b_shift)[letter]
     end
-    c = message_char_shift_groups(message)[2].map do |letter_index|
-      shift_rotation[:c_rotation][letter_index]
+    c = message_char_shift_groups(message)[2].map do |letter|
+      shift_rotation(:c_shift)[letter]
     end
-    d = message_char_shift_groups(message)[3].map do |letter_index|
-      shift_rotation[:d_rotation][letter_index]
+    d = message_char_shift_groups(message)[3].map do |letter|
+      shift_rotation(:d_shift)[letter]
     end
     ordered_array = a.zip(b, c, d)
     unified_array = ordered_array.flatten.compact
@@ -76,43 +76,39 @@ class Enigma
     ("a".."z").to_a << " "
   end
 
-  def char_index_lookup(message)
-    message_arry = message.split("")
-    message_arry.map do |char|
-      character_array.index(char)
-    end
-  end
+  # May not need this method
+  # def char_index_lookup(message)
+  #   message_arry = message.split("")
+  #   message_arry.map do |char|
+  #     character_array.index(char)
+  #   end
+  # end
 
+  #
   def message_char_shift_groups(message)
-    index_arry = char_index_lookup(message)
+    message_arry = message.split("")
+    # index_arry = char_index_lookup(message)
     shift_groups = [[],[],[],[]]
-    # shift_groups = {a_indices: [],
-    #                 b_indices: [],
-    #                 c_indices: [],
-    #                 d_indices: []}
     d_group_length = shift_groups[3].length
-    max_group_length = index_arry.length % 4
-    index_arry.each_with_index do |num, index|
+    max_group_length = message_arry.length % 4
+    message_arry.each_with_index do |letter, index|
       if index % 4 == 0
-        shift_groups[0] << num
+        shift_groups[0] << letter
       elsif index % 4 == 1
-        shift_groups[1] << num
+        shift_groups[1] << letter
       elsif index % 4 == 2
-        shift_groups[2] << num
+        shift_groups[2] << letter
       elsif index % 4 == 3
-        shift_groups[3] << num
+        shift_groups[3] << letter
       end
       break if d_group_length == max_group_length
     end
     shift_groups
   end
 
-  def shift_rotation
-    a = character_array.rotate(shift_generator[:a_shift])
-    b = character_array.rotate(shift_generator[:b_shift])
-    c = character_array.rotate(shift_generator[:c_shift])
-    d = character_array.rotate(shift_generator[:d_shift])
-    {a_rotation: a, b_rotation: b, c_rotation: c, d_rotation: d}
+  def shift_rotation(shift)
+      rotated_array = character_array.rotate(shift_generator[shift])
+      character_array.zip(rotated_array).to_h
   end
   # find char index for knowing which shift to apply
   #shift and get new index position
