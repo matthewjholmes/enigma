@@ -27,7 +27,7 @@ RSpec.describe Enigma do
       expect(@enigma.encrypt("hello world", "02715")).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
     end
 
-    it '#letter_encrypter(message) applys shifts' do
+    xit '#letter_encrypter(message) applys shifts' do
       # need mock/stub for key and date generation
       expect(@enigma.letter_encrypter("hello world")).to eq("nefau qdxly")
     end
@@ -46,7 +46,7 @@ RSpec.describe Enigma do
   end
 
   describe 'helper methods (may be moved to other classes)' do
-    it '#today_generator method returns date in DDMMYY format' do
+    xit '#today_generator method returns date in DDMMYY format' do
       # need mock/stub for date
       expect(@enigma.today_generator).to eq("070821")
     end
@@ -88,22 +88,50 @@ RSpec.describe Enigma do
     it '#char_index_lookup returns index of each message char in character_array' do
       expected = [7, 4, 11, 11, 14, 26, 22, 14, 17, 11, 3]
 
-      expect(@enigma.char_index_lookup("hello world")).to eq(expected)
+      expect(@enigma.char_lookup("hello world")).to eq(expected)
     end
 
-    it '#message_char_shift_groups(message) collects character indices according to which shift should be applied' do
+    it '#message_char_shift_groups(message) collects character  according to which shift should be applied' do
       expected = [[7, 14, 17], [4, 26, 11], [11, 22, 3], [11, 14]]
 
       expect(@enigma.message_char_shift_groups(@message)).to eq(expected)
     end
 
-    xit '#shift_rotation(shift) encrypts letters' do
-      shift_1 = ["z", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y"]
-      shift_2 = ["n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"]
-      # need mock/stub for shifts
-      expect(@enigma.shift_rotation).to eq(shift_1)
-      expect(@enigma.shift_rotation).to eq(shift_2)
-    end
+    it '#shift_rotation(shift) encrypts letters' do
+      # shift_1 = ["z", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y"]
+      # shift_2 = ["n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"]
 
+      # need mock/stub for shifts
+      a_rotation_hash = {"a"=>"i",
+                         "b"=>"j",
+                         "c"=>"k",
+                         "d"=>"l",
+                         "e"=>"m",
+                         "f"=>"n",
+                         "g"=>"o",
+                         "h"=>"p",
+                         "i"=>"q",
+                         "j"=>"r",
+                         "k"=>"s",
+                         "l"=>"t",
+                         "m"=>"u",
+                         "n"=>"v",
+                         "o"=>"w",
+                         "p"=>"x",
+                         "q"=>"y",
+                         "r"=>"z",
+                         "s"=>" ",
+                         "t"=>"a",
+                         "u"=>"b",
+                         "v"=>"c",
+                         "w"=>"d",
+                         "x"=>"e",
+                         "y"=>"f",
+                         "z"=>"g",
+                         " "=>"h"}
+
+      expect(@enigma.shift_rotation(shift)).to be_a(Hash)
+      expect(@enigma.shift_rotation(:a_shift)).to be_a(a_rotation_hash)
+    end
   end
 end

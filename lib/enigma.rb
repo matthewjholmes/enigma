@@ -76,6 +76,7 @@ class Enigma
     ("a".."z").to_a << " "
   end
 
+  # May not need this method
   def char_index_lookup(message)
     message_arry = message.split("")
     message_arry.map do |char|
@@ -83,13 +84,10 @@ class Enigma
     end
   end
 
+  #
   def message_char_shift_groups(message)
     index_arry = char_index_lookup(message)
     shift_groups = [[],[],[],[]]
-    # shift_groups = {a_indices: [],
-    #                 b_indices: [],
-    #                 c_indices: [],
-    #                 d_indices: []}
     d_group_length = shift_groups[3].length
     max_group_length = index_arry.length % 4
     index_arry.each_with_index do |num, index|
@@ -107,12 +105,9 @@ class Enigma
     shift_groups
   end
 
-  def shift_rotation
-    a = character_array.rotate(shift_generator[:a_shift])
-    b = character_array.rotate(shift_generator[:b_shift])
-    c = character_array.rotate(shift_generator[:c_shift])
-    d = character_array.rotate(shift_generator[:d_shift])
-    {a_rotation: a, b_rotation: b, c_rotation: c, d_rotation: d}
+  def shift_rotation(shift)
+      rotated_array = character_array.rotate(shift_generator[shift])
+      character_array.zip(rotated_array).to_h
   end
   # find char index for knowing which shift to apply
   #shift and get new index position
