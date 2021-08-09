@@ -23,16 +23,16 @@ RSpec.describe Enigma do
       expect(@encryption_method_all_args).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
     end
 
-    it '#encrypt method takes key and date as optional' do
+    xit '#encrypt method takes key and date as optional' do
       # need mock/stub for key and date generation
       expect(@encryption_method_string_only).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
 
       expect(@encryption_method_string_and_key).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
     end
 
-    xit '#letter_encrypter(message) applys shifts' do
+    it '#text_encrypter(message) applys shifts' do
       # need mock/stub for key and date generation
-      expect(@enigma.letter_encrypter("hello world")).to eq("nefau qdxly")
+      expect(@enigma.text_encrypter("hello world")).to eq("nefau qdxly")
     end
   end
 
@@ -43,8 +43,13 @@ RSpec.describe Enigma do
 
     xit '#decrypt method can supply date if not provided' do
       # need mock/stub for date
-      encrypted = enigma.encrypt("hello world", "02715")
+      encrypted = @enigma.encrypt("hello world", "02715")
       expect(@enigma.decrypt(encrypted[:encryption], "02715")).to eq({decryption: "hello world", key: "02715", date: "060821"})
+    end
+
+    it '#text_decrypter(message) uses shifts to decrypt' do
+      # need mock/stub for key and date generation
+      expect(@enigma.text_decrypter("nefau qdxly")).to eq("hello world")
     end
   end
 
@@ -100,7 +105,7 @@ RSpec.describe Enigma do
       expect(@enigma.message_char_shift_groups("hello world")).to eq(expected)
     end
 
-    it '#shift_rotation(shift) encrypts letters' do
+    it '#shift_rotation(shift) returns shifted character array' do
       # shift_1 = ["z", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y"]
       # shift_2 = ["n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"]
 
