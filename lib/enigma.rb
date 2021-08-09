@@ -7,14 +7,21 @@ class Enigma
     @date = today_generator
   end
 
-  def encrypt(message, key = key_generator, date = today_generator)
+  def encrypt(message, key = key_generator, date = @date)
     @key = key
     @date = date
-    encryption_text = letter_encrypter(message)
+    encryption_text = text_encrypter(message)
     {encryption: encryption_text, key: @key, date: @date}
   end
 
-  def letter_encrypter(message)
+  def decrypt(cyphertext, key, date = @date)
+    @key = key
+    @date = date
+    decryption_text = text_decrypter(message)
+    {decryption: encryption_text, key: @key, date: @date}
+  end
+
+  def text_encrypter(message)
     a = message_char_shift_groups(message)[0].map do |letter|
       shift_rotation(:a_shift)[letter]
     end
@@ -32,9 +39,11 @@ class Enigma
     encryption_text = unified_array.join
   end
 
+
+
   def offset_generator(source)
     if source == :today
-      date = today_generator
+      date = @date
     else
       date = source
     end
@@ -91,15 +100,15 @@ class Enigma
     shift_groups = [[],[],[],[]]
     d_group_length = shift_groups[3].length
     max_group_length = message_arry.length % 4
-    message_arry.each_with_index do |letter, index|
+    message_arry.each_with_index do |char, index|
       if index % 4 == 0
-        shift_groups[0] << letter
+        shift_groups[0] << char
       elsif index % 4 == 1
-        shift_groups[1] << letter
+        shift_groups[1] << char
       elsif index % 4 == 2
-        shift_groups[2] << letter
+        shift_groups[2] << char
       elsif index % 4 == 3
-        shift_groups[3] << letter
+        shift_groups[3] << char
       end
       break if d_group_length == max_group_length
     end
