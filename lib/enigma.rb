@@ -39,7 +39,23 @@ class Enigma
     encryption_text = unified_array.join
   end
 
-
+  def text_decrypter(message)
+    a = message_char_shift_groups(message)[0].map do |letter|
+      shift_rotation(:a_shift).key(letter)
+    end
+    b = message_char_shift_groups(message)[1].map do |letter|
+      shift_rotation(:b_shift).key(letter)
+    end
+    c = message_char_shift_groups(message)[2].map do |letter|
+      shift_rotation(:c_shift).key(letter)
+    end
+    d = message_char_shift_groups(message)[3].map do |letter|
+      shift_rotation(:d_shift).key(letter)
+    end
+    ordered_array = a.zip(b, c, d)
+    unified_array = ordered_array.flatten.compact
+    decryption_text = unified_array.join
+  end
 
   def offset_generator(source)
     if source == :today

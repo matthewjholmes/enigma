@@ -47,6 +47,10 @@ RSpec.describe Enigma do
       expect(@enigma.decrypt(encrypted[:encryption], "02715")).to eq({decryption: "hello world", key: "02715", date: "060821"})
     end
 
+    it '#text_decrypter(message) uses shifts to decrypt' do
+      # need mock/stub for key and date generation
+      expect(@enigma.text_decrypter("nefau qdxly")).to eq("hello world")
+    end
   end
 
   describe 'helper methods (may be moved to other classes)' do
