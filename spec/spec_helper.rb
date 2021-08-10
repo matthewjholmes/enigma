@@ -7,3 +7,4 @@ SimpleCov.start
 # require './lib/offsets'
 # require './lib/shifts'
 require './lib/enigma'
+require './lib/key'
