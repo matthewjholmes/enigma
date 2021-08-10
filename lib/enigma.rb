@@ -1,16 +1,16 @@
 require 'date'
+require_relative 'key'
 class Enigma
 
-  attr_reader :key, :date
+  # attr_reader :key, :date
 
   def initialize
-    @key = key_generator
-    @date = today_generator
-  end
+    @key_obj = Key.new
+    @shift_obj = Shift.new
+    @key = @key_obj.key_generator
+    @date = @shift_obj.today_generator
 
-  def object_initialization
-    key = Key.new
-    shift = Shift.new
+  end
 
   def encrypt(message, key = @key, date = @date)
     encryption_text = text_encrypter(message)
@@ -23,21 +23,23 @@ class Enigma
   end
 
   def text_encrypter(message)
-    a = message_char_shift_groups(message)[0].map do |letter|
-      shift_rotation(:a_shift)[letter]
+    require "pry"; binding.pry
+    a = message_char_shift_groups(message)[0].map do |char|
+      shift_rotation(:a_shift)[char]
     end
-    b = message_char_shift_groups(message)[1].map do |letter|
-      shift_rotation(:b_shift)[letter]
+    b = message_char_shift_groups(message)[1].map do |char|
+      shift_rotation(:b_shift)[char]
     end
-    c = message_char_shift_groups(message)[2].map do |letter|
-      shift_rotation(:c_shift)[letter]
+    c = message_char_shift_groups(message)[2].map do |char|
+      shift_rotation(:c_shift)[char]
     end
-    d = message_char_shift_groups(message)[3].map do |letter|
-      shift_rotation(:d_shift)[letter]
+    d = message_char_shift_groups(message)[3].map do |char|
+      shift_rotation(:d_shift)[char]
     end
     ordered_array = a.zip(b, c, d)
     unified_array = ordered_array.flatten.compact
     encryption_text = unified_array.join
+    require "pry"; binding.pry
   end
 
   def text_decrypter(message)
@@ -74,16 +76,14 @@ class Enigma
   end
 
   def shift_generator
-    a = offset_generator(@date)[:a_offset] + key_parser(@key)[:a_key]
-    b = offset_generator(@date)[:b_offset] + key_parser(@key)[:b_key]
-    c = offset_generator(@date)[:c_offset] + key_parser(@key)[:c_key]
-    d = offset_generator(@date)[:d_offset] + key_parser(@key)[:d_key]
+    a = offset_generator(@date)[:a_offset] + @key_obj.key_parser(@key)[:a_key]
+    b = offset_generator(@date)[:b_offset] + @key_obj.key_parser(@key)[:b_key]
+    c = offset_generator(@date)[:c_offset] + @key_obj.key_parser(@key)[:c_key]
+    d = offset_generator(@date)[:d_offset] + @key_obj.key_parser(@key)[:d_key]
     {a_shift: a, b_shift: b, c_shift: c, d_shift: d}
   end
 
-  def today_generator
-    Date.today.strftime("%d%m%y").to_s
-  end
+
 
   # def key_parser(key)
   #   a = key[0..1].to_i
