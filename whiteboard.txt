@@ -3,18 +3,22 @@ ENIGMA
     encrypt - output hash
     decrypt - output hash
 
-    encrypt(message, key, date)
-      message String as an argument.
-      optional take a Key and Date as arguments
-      No key then generate
-      no date then generate
 
-
-
-
-      You should be able to generate random numbers with leading zeros
-
-      Your translation should only translate using lowercase letters. If a letter is uppercase, it should use the lowercase translation, so in the example above, “HELLO WORLD” would still translate to “keder ohulw”
-
-      
       If you encounter a character not in the character set, it should be translated as itself. Using the example above, “hello world!” should be translated as “keder ohulw!”
+
+  Refactor notes:
+    structure classes for single responsibility
+    module opportunities for encrypter/decrypter (h.invert)
+    encrypt/decrypt (though decrypt always needs key)
+    shorten or break out inot more helper methods message char shift groups
+    File I/O--does this refer to reading and writing to/from files from CLI?
+
+
+
+  Before submission, need to add README to include evaluation rubric
+
+  Nice to have: have a CLI that allows use of both encryption and decryption, storage of past messages, etc.
+
+
+ENIGMA
+cipher - 

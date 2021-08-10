@@ -1,10 +1,13 @@
 require 'simplecov'
 require 'rspec'
-SimpleCov.start
+SimpleCov.start do
+  add_filter './lib/encrypt'
+  add_filter './lib/decrypt'
+end
 
 # Add lib files here
-require './lib/keys'
-require './lib/offsets'
-require './lib/shifts'
+require 'date'
+require './lib/shift'
 require './lib/enigma'
-require './lib/encrypt'
+require './lib/cipher'
+require './lib/generatable'
