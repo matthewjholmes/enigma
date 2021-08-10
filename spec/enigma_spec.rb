@@ -10,14 +10,14 @@ RSpec.describe Enigma do
   end
 
   describe '#initalize' do
-    xit 'exists' do
+    it 'exists' do
       expect(@enigma).to be_instance_of(Enigma)
     end
   end
 
   describe '#encrpyt' do
     # key and date arguments should be optional
-    xit 'can #encrypt(message, key, date)' do
+    it 'can #encrypt(message, key, date)' do
       all_args = @enigma.encrypt("hello world", "02715", "060821")
       expect(all_args).to be_a(Hash)
       expect(all_args).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
