@@ -1,5 +1,5 @@
-require_relative 'spec_helper'
-
-RSpec.describe Encrypt do
-
-end
+# require_relative 'spec_helper'
+#
+# RSpec.describe Encrypt do
+#
+# end

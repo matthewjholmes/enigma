@@ -7,7 +7,6 @@ RSpec.describe Enigma do
     @encryption_method_all_args = @enigma.encrypt("hello world", "02715", "060821")
     @encryption_method_string_only = @enigma.encrypt("hello world")
     @encryption_method_string_and_key = @enigma.encrypt("hello world", "02715")
-
   end
 
   describe '#initalize' do
@@ -19,29 +18,34 @@ RSpec.describe Enigma do
   describe '#encrpyt' do
     # key and date arguments should be optional
     it 'can #encrypt(message, key, date)' do
-      expect(@encryption_method_all_args).to be_a(Hash)
-      expect(@encryption_method_all_args).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
+      all_args = @enigma.encrypt("hello world", "02715", "060821")
+      expect(all_args).to be_a(Hash)
+      expect(all_args).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
     end
 
-    xit '#encrypt method takes key and date as optional' do
-      # need mock/stub for key and date generation
-      expect(@encryption_method_string_only).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
+    it '#encrypt method takes key and date as optional' do
+      allow_any_instance_of(Enigma).to receive(:today).and_return(2021-6-8)
 
-      expect(@encryption_method_string_and_key).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
+      allow_any_instance_of(Enigma).to receive(:key_generator).and_return("02715")
+
+      expect(@enigma.encrypt("hello world")).to eq({encryption: "nefau qdxly", key: "02715", date: "060821"})
     end
 
     it '#text_encrypter(message) applys shifts' do
-      # need mock/stub for key and date generation
+      allow_any_instance_of(Enigma).to receive(:today).and_return(2021-6-8)
+
+      allow_any_instance_of(Enigma).to receive(:key_generator).and_return("02715")
+
       expect(@enigma.text_encrypter("hello world")).to eq("nefau qdxly")
     end
   end
 
   describe '#decrypt' do
-    xit 'can #decrypt(cyphertext, key, date)' do
+    it 'can #decrypt(cyphertext, key, date)' do
       expect(@enigma.decrypt("nefau qdxly", "02715", "060821")).to eq({decryption: "hello world", key: "02715", date: "060821"})
     end
 
-    xit '#decrypt method can supply date if not provided' do
+    it '#decrypt method can supply date if not provided' do
       # need mock/stub for date
       encrypted = @enigma.encrypt("hello world", "02715")
       expect(@enigma.decrypt(encrypted[:encryption], "02715")).to eq({decryption: "hello world", key: "02715", date: "060821"})
@@ -54,9 +58,10 @@ RSpec.describe Enigma do
   end
 
   describe 'helper methods (may be moved to other classes)' do
-    xit '#today_generator method returns date in DDMMYY format' do
-      # need mock/stub for date
-      expect(@enigma.today_generator).to eq("070821")
+    it '#today_generator method returns date in DDMMYY format' do
+      allow_any_instance_of(Enigma).to receive(:today).and_return(2021-8-9)
+
+      expect(@enigma.today_generator).to eq("090821")
     end
 
     it '#key_parser parses keys' do
@@ -65,7 +70,6 @@ RSpec.describe Enigma do
     end
 
     it '#key_generator generates random five-digit number' do
-      # mock/stub
       expect(@enigma.key_generator.length).to eq(5)
     end
 
@@ -74,22 +78,18 @@ RSpec.describe Enigma do
     end
 
     it '#offset_generator(source) generates from last four of date^2' do
-      # need mock/stub for date
-      # for 070821:
       supplied_date_offsets = {a_offset: 1, b_offset: 0, c_offset: 2, d_offset: 5}
       today_offsets = {a_offset: 4, b_offset: 0, c_offset: 4, d_offset: 1}
       expect(@enigma.offset_generator(:today)).to eq(today_offsets)
       expect(@enigma.offset_generator("040895")).to eq(supplied_date_offsets)
     end
 
-    xit '#shift_generator adds keys and offsets together' do
-      date1 = double(@enigma.date)
-      allow(date1).to receive(:date).and_return("070821")
-      key1 = double(@enigma.key_generator)
-      allow(key1).to receive(:key_generator).and_return("71285")
-      # @enigma.offset_generator("070821")
-      # @enigma.key_parser("71285")
-      expected = {a_shift: 48, b_shift: 45, c_shift: 58, d_shift: 48}
+    it '#shift_generator adds keys and offsets together' do
+      # allow_any_instance_of(Enigma).to receive(:today_generator).and_return("070821")
+      #
+      # allow_any_instance_of(Enigma).to receive(:key_generator).and_return("71285")
+
+      expected = {a_shift: 6, b_shift: 27, c_shift: 75, d_shift: 16}
       expect(@enigma.shift_generator).to eq(expected)
     end
 

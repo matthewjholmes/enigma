@@ -1,3 +1,4 @@
+require 'date'
 class Enigma
 
   attr_reader :key, :date
@@ -7,18 +8,14 @@ class Enigma
     @date = today_generator
   end
 
-  def encrypt(message, key = key_generator, date = @date)
-    @key = key
-    @date = date
+  def encrypt(message, key = @key, date = @date)
     encryption_text = text_encrypter(message)
-    {encryption: encryption_text, key: @key, date: @date}
+    {encryption: encryption_text, key: key, date: date}
   end
 
-  def decrypt(cyphertext, key, date = @date)
-    @key = key
-    @date = date
+  def decrypt(message, key = @key, date = @date)
     decryption_text = text_decrypter(message)
-    {decryption: encryption_text, key: @key, date: @date}
+    {decryption: decryption_text, key: key, date: date}
   end
 
   def text_encrypter(message)
@@ -109,7 +106,6 @@ class Enigma
   #   end
   # end
 
-  #
   def message_char_shift_groups(message)
     message_arry = message.split("")
     # index_arry = char_index_lookup(message)
