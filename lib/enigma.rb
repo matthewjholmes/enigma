@@ -8,6 +8,10 @@ class Enigma
     @date = today_generator
   end
 
+  def object_initialization
+    key = Key.new
+    shift = Shift.new
+
   def encrypt(message, key = @key, date = @date)
     encryption_text = text_encrypter(message)
     {encryption: encryption_text, key: key, date: date}

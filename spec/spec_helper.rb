@@ -8,3 +8,4 @@ SimpleCov.start
 # require './lib/shifts'
 require './lib/enigma'
 require './lib/key'
+require './lib/shift'
